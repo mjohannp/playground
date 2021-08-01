@@ -1,11 +1,18 @@
 // load the things we need
 var express = require('express');
 const basicAuth = require('express-basic-auth')
+const dotenv = require('dotenv').config()
 
 var app = express();
- 
+
+const pass = process.env.ADMIN_PASS
+if (pass === undefined || pass.length == 0) {
+    console.error("Admin passord not defined!")
+    process.exit(1)
+}
+
 app.use(basicAuth({
-    users: { 'admin': 'pass' },
+    users: { 'admin': pass },
     challenge: true,
     unauthorizedResponse: (req) => {
         return "Zugang verweigert!"
